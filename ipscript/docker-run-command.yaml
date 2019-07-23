@@ -1,0 +1,1 @@
+docker run -d --name ipscript -v $PWD/ipscript/ipaddresses.db:/ipscript/ipaddresses.db myipscript:latest
