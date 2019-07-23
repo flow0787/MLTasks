@@ -1,0 +1,26 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "ubuntu-server"
+  config.vm.hostname = "ubuntu-server"
+  config.vm.box = "bento/ubuntu-16.04"
+  config.vm.network "private_network", ip: "192.168.100.10"
+
+  config.vm.synced_folder "$PWD/fileslimit/", "/fileslimit/"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-server"
+    vb.gui = false
+    vb.memory = "1024"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-add-repository ppa:ansible/ansible
+    apt-get update
+    apt-get install ansible -y
+    apt-get install python -y
+    echo "current files limit"
+    ulimit -aH
+    ansible-playbook /fileslimit/raise_limit.yaml
+    echo "limits after running playbook"
+    ulimit -aH
+end

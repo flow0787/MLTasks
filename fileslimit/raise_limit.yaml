@@ -1,0 +1,11 @@
+---
+hosts: 127.0.0.1
+gather_facts: false
+remote_user: root
+tasks:
+  - name: Raise open files limit
+    pam_limits:
+      domain: '*'
+      limit_type: soft
+      limit_item: nofile
+      value: 128000  
